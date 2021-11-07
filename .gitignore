@@ -114,3 +114,7 @@ dist
 
 # Local History for Visual Studio Code
 .history/
+
+
+*.sqlite3
+*.sqlite
