@@ -1,6 +1,6 @@
 var express = require("express")
 var app = express()
-var db = require("./db/database.js")
+var db = require("./database.js")
 
 var bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -51,6 +51,7 @@ app.get("/api/empresa/:id", (req, res, next) => {
 });
 
 
+
 // inserir empresa
 app.post("/api/empresa/", (req, res, next) => {
     var errors=[]
@@ -59,6 +60,12 @@ app.post("/api/empresa/", (req, res, next) => {
     }
     if (!req.body.email){
         errors.push("No email specified");
+    }
+    if (!req.body.nivel){
+        errors.push("No nivel specified");
+    }
+    if (!req.body.pontos){
+        errors.push("No pontos specified");
     }
     if (errors.length){
         res.status(400).json({"error":errors.join(",")});
@@ -70,7 +77,7 @@ app.post("/api/empresa/", (req, res, next) => {
         nivel : req.body.nivel,
         pontos : req.body.pontos
     }
-    var sql ='INSERT INTO empresa (companyname, email, nivel, pontos) VALUES (?,?,?,?)'
+    var sql ='INSERT INTO empresas (companyname, email, nivel, pontos) VALUES (?,?,?,?)'
     var params =[data.companyname, data.email, data.nivel, data.pontos]
     db.run(sql, params, function (err, result) {
         if (err){
@@ -117,7 +124,7 @@ app.patch("/api/empresas/:id", (req, res, next) => {
 // deletar empresas
 app.delete("/api/empresa/:id", (req, res, next) => {
     db.run(
-        'DELETE FROM user WHERE id = ?',
+        'DELETE FROM empresas WHERE id = ?',
         req.params.id,
         function (err, result) {
             if (err){
